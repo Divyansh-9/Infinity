@@ -1,5 +1,5 @@
 # AI-Powered Video Surveillance for Anomaly Detection
-
+(Submission for Neural Nexus 2.0 by team Infinity)
 ## Overview
 Standard CCTV systems are passive. They record everything but require a human to watch the footage to identify a problem. This project changes that by building a system that analyzes video in real-time to detect unusual events like violence, accidents, or theft. The system doesn't just flag an event; it ranks the severity on a scale of 1 to 10 and provides a logical explanation for why it triggered an alert.
 
