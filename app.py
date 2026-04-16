@@ -82,13 +82,14 @@ def predict_video(video_path, model, threshold):
     segment_scores = (segment_magnitudes - segment_magnitudes.min()) / (segment_magnitudes.max() - segment_magnitudes.min() + 1e-6)
     
     # 3. Aggregate for the Ensemble prediction
-    # Mean, Max, Min, Std
+    # Mean, Max
     f_mean = np.mean(features, axis=0)
     f_max = np.max(features, axis=0)
-    f_min = np.min(features, axis=0)
-    f_std = np.std(features, axis=0)
     
-    final_features = np.concatenate([f_mean, f_max, f_min, f_std]).reshape(1, -1)
+    # We must match the EXACT number of features the XGBoost model was trained on!
+    # The XGBoost model currently saved in robust_anomaly_model.json was trained on 
+    # X_train_flat (which is just Mean + Max = 2048 dims), NOT X_train_flat_enhanced (4096 dims).
+    final_features = np.concatenate([f_mean, f_max]).reshape(1, -1)
     
     if model is not None:
         proba = model.predict_proba(final_features)[0, 1]
