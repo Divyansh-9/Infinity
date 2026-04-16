@@ -4,7 +4,7 @@ pandas
 joblib
 torch
 torchvision
-scikit-learn==1.2.2
+scikit-learn
 xgboost
 opencv-python-headless
 matplotlib
