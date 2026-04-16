@@ -5,6 +5,8 @@ import cv2
 import tempfile
 import torch
 import pandas as pd
+import xgboost as xgb
+import os
 
 # Set page config for a minimal dark theme
 st.set_page_config(page_title="CCTV Anomaly Detection", layout="centered", initial_sidebar_state="collapsed")
@@ -30,22 +32,25 @@ st.markdown("""
 st.title("CCTV Anomaly Detection")
 st.markdown("Upload a CCTV video to detect anomalous activities. The model will output an anomaly likelihood score and a timeline graph.")
 
-import os
-
 @st.cache_resource
 def load_model():
-    # Load the trained ensemble model and threshold
-    # Make sure to save these in your notebook first!
+    # Load the powerful native XGBoost model
     try:
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        model_path = os.path.join(base_dir, 'anomaly_ensemble_model.pkl')
-        thresh_path = os.path.join(base_dir, 'best_threshold.pkl')
-        model = joblib.load(model_path)
-        threshold = joblib.load(thresh_path)
+        model_path = os.path.join(base_dir, 'robust_anomaly_model.json')
+        thresh_path = os.path.join(base_dir, 'best_threshold.txt')
+        
+        # XGBoost native cross-platform loading safely
+        model = xgb.XGBClassifier()
+        model.load_model(model_path)
+        
+        with open(thresh_path, 'r') as f:
+            threshold = float(f.read().strip())
+            
         return model, threshold
     except Exception as e:
         st.error(f"Failed to load model files! Exact Error: {str(e)}")
-        st.warning("Please ensure 'anomaly_ensemble_model.pkl' and 'best_threshold.pkl' are correctly uploaded to GitHub. If the files are over 50MB, ensure you used Git LFS (Large File Storage).")
+        st.warning("Please ensure 'robust_anomaly_model.json' and 'best_threshold.txt' are in your GitHub repo.")
         return None, 0.5
 
 # Dummy I3D Feature Extractor (Replace with your actual I3D extraction pipeline)
