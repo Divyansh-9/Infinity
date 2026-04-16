@@ -38,3 +38,8 @@ The system uses attention weights to identify exactly which segment caused the s
 
 ## Performance Constraints
 This project is designed to run on mid-range hardware (like an RTX 4050) by prioritizing "Sparse Sampling." By only analyzing the most important frames in a segment, we achieve real-time performance without needing a massive server farm.
+
+## Result and Outputs
+- The final model gives 93.68% accuracy on validation set.
+- The model returns the severity score out of 10
+- The model provides a short explanation including the timeframe where anomaly was detected
